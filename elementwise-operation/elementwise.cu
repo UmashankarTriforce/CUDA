@@ -1,21 +1,21 @@
 #include <cuda.h>
 #include <stdio.h>
 
-__global__ void vectorAddKernel(float *a, float *b, float *c, int n){
+__global__ void vectorAddKernel(double *a, double *b, double *c, int n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i < n){
         c[i] = a[i] + b[i];
     }
 }
 
-__global__ void vectorSubKernel(float *a, float *b, float *c, int n){
+__global__ void vectorSubKernel(double *a, double *b, double *c, int n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i < n){
         c[i] = a[i] - b[i];
     }
 }
 
-__global__ void vectorMulKernel(float *a, float *b, float *c, int n){
+__global__ void vectorMulKernel(double *a, double *b, double *c, int n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i < n){
         c[i] = a[i] * b[i];
@@ -23,22 +23,22 @@ __global__ void vectorMulKernel(float *a, float *b, float *c, int n){
 }
 
 extern "C"{
-    float *VectorAdd(float *arrA, float *arrB, int n){
-        float *h_c;
-        float *d_a, *d_b, *d_c;
+    double *VectorAdd(double *arrA, double *arrB, int n){
+        double *h_c;
+        double *d_a, *d_b, *d_c;
 
-        cudaMallocHost((void **) &h_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_a, sizeof(float) * n);
-        cudaMalloc((void **) &d_b, sizeof(float) * n);
+        cudaMallocHost((void **) &h_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_a, sizeof(double) * n);
+        cudaMalloc((void **) &d_b, sizeof(double) * n);
 
-        cudaMemcpy(d_a, arrA, sizeof(float) * n, cudaMemcpyHostToDevice);
-        cudaMemcpy(d_b, arrB, sizeof(float) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_a, arrA, sizeof(double) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_b, arrB, sizeof(double) * n, cudaMemcpyHostToDevice);
 
         vectorAddKernel <<< 2, (n+1/2) >>> (d_a, d_b, d_c, n);
         cudaDeviceSynchronize();
 
-        cudaMemcpy(h_c, d_c, sizeof(float) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(h_c, d_c, sizeof(double) * n, cudaMemcpyDeviceToHost);
         cudaFree(d_c);
         cudaFree(d_a);
         cudaFree(d_b);
@@ -46,22 +46,22 @@ extern "C"{
         return h_c;
     }
 
-    float *VectorSub(float *arrA, float *arrB, int n){
-        float *h_c;
-        float *d_a, *d_b, *d_c;
+    double *VectorSub(double *arrA, double *arrB, int n){
+        double *h_c;
+        double *d_a, *d_b, *d_c;
 
-        cudaMallocHost((void **) &h_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_a, sizeof(float) * n);
-        cudaMalloc((void **) &d_b, sizeof(float) * n);
+        cudaMallocHost((void **) &h_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_a, sizeof(double) * n);
+        cudaMalloc((void **) &d_b, sizeof(double) * n);
 
-        cudaMemcpy(d_a, arrA, sizeof(float) * n, cudaMemcpyHostToDevice);
-        cudaMemcpy(d_b, arrB, sizeof(float) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_a, arrA, sizeof(double) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_b, arrB, sizeof(double) * n, cudaMemcpyHostToDevice);
 
         vectorSubKernel <<< 2, (n+1/2) >>> (d_a, d_b, d_c, n);
         cudaDeviceSynchronize();
 
-        cudaMemcpy(h_c, d_c, sizeof(float) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(h_c, d_c, sizeof(double) * n, cudaMemcpyDeviceToHost);
         cudaFree(d_c);
         cudaFree(d_a);
         cudaFree(d_b);
@@ -69,22 +69,22 @@ extern "C"{
         return h_c;
     }
 
-    float *VectorMul(float *arrA, float *arrB, int n){
-        float *h_c;
-        float *d_a, *d_b, *d_c;
+    double *VectorMul(double *arrA, double *arrB, int n){
+        double *h_c;
+        double *d_a, *d_b, *d_c;
 
-        cudaMallocHost((void **) &h_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_c, sizeof(float) * n);
-        cudaMalloc((void **) &d_a, sizeof(float) * n);
-        cudaMalloc((void **) &d_b, sizeof(float) * n);
+        cudaMallocHost((void **) &h_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_c, sizeof(double) * n);
+        cudaMalloc((void **) &d_a, sizeof(double) * n);
+        cudaMalloc((void **) &d_b, sizeof(double) * n);
 
-        cudaMemcpy(d_a, arrA, sizeof(float) * n, cudaMemcpyHostToDevice);
-        cudaMemcpy(d_b, arrB, sizeof(float) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_a, arrA, sizeof(double) * n, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_b, arrB, sizeof(double) * n, cudaMemcpyHostToDevice);
 
         vectorMulKernel <<< 2, (n+1/2) >>> (d_a, d_b, d_c, n);
         cudaDeviceSynchronize();
 
-        cudaMemcpy(h_c, d_c, sizeof(float) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(h_c, d_c, sizeof(double) * n, cudaMemcpyDeviceToHost);
         cudaFree(d_c);
         cudaFree(d_a);
         cudaFree(d_b);

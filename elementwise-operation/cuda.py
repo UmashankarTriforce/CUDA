@@ -21,13 +21,13 @@ class Vector:
             raise ValueError('Length of both vectors should be same')
 
         self.elementWise.VectorAdd.argtypes = \
-            [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float),
+            [ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double),
                 ctypes.c_int]
         self.elementWise.VectorAdd.restype =\
-            ctypes.POINTER(ctypes.c_float)
+            ctypes.POINTER(ctypes.c_double)
 
-        A = (ctypes.c_float * len(A))(*A)
-        B = (ctypes.c_float * len(B))(*B)
+        A = (ctypes.c_double * len(A))(*A)
+        B = (ctypes.c_double * len(B))(*B)
         C = self.elementWise.VectorAdd(A, B, len(A))
         return numpy.ctypeslib.as_array(C, shape=(len(A), ))
 
@@ -44,13 +44,13 @@ class Vector:
             raise ValueError('Length of both vectors should be same')
 
         self.elementWise.VectorSub.argtypes = \
-            [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float),
+            [ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double),
                 ctypes.c_int]
         self.elementWise.VectorSub.restype =\
-            ctypes.POINTER(ctypes.c_float)
+            ctypes.POINTER(ctypes.c_double)
 
-        A = (ctypes.c_float * len(A))(* A)
-        B = (ctypes.c_float * len(B))(* B)
+        A = (ctypes.c_double * len(A))(* A)
+        B = (ctypes.c_double * len(B))(* B)
         C = self.elementWise.VectorSub(A, B, len(A))
         return numpy.ctypeslib.as_array(C, shape=(len(A), ))
 
@@ -67,12 +67,12 @@ class Vector:
             raise ValueError('Length of both vectors should be same')
 
         self.elementWise.VectorMul.argtypes = \
-            [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float),
+            [ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double),
                 ctypes.c_int]
         self.elementWise.VectorMul.restype =\
-            ctypes.POINTER(ctypes.c_float)
+            ctypes.POINTER(ctypes.c_double)
 
-        A = (ctypes.c_float * len(A))(* A)
-        B = (ctypes.c_float * len(B))(* B)
+        A = (ctypes.c_double * len(A))(* A)
+        B = (ctypes.c_double * len(B))(* B)
         C = self.elementWise.VectorMul(A, B, len(A))
         return numpy.ctypeslib.as_array(C, shape=(len(A), ))
